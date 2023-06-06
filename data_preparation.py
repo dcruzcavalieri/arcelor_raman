@@ -24,16 +24,16 @@ lim9 = 1101; #1500
 lim10 = 1301; #1800
 
 #Sio2
-model_knn_sio2 = joblib.load('model_knn_sio2.pkl')
-model_svr_sio2 = joblib.load('model_svr_sio2.pkl')
-model_rf_sio2 = joblib.load('model_rf_sio2.pkl')
-ridge_sio2 = joblib.load('ridge_sio2.pkl')
+model_knn_sio2 = joblib.load('/models/model_knn_sio2.pkl')
+model_svr_sio2 = joblib.load('/models/model_svr_sio2.pkl')
+model_rf_sio2 = joblib.load('/models/model_rf_sio2.pkl')
+ridge_sio2 = joblib.load('/models/ridge_sio2.pkl')
 
 #CaO
-model_knn_cao = joblib.load('model_knn_cao.pkl')
-model_svr_cao = joblib.load('model_svr_cao.pkl')
-model_rf_cao = joblib.load('model_rf_cao.pkl')
-ridge_cao = joblib.load('ridge_cao.pkl')
+model_knn_cao = joblib.load('/models/model_knn_cao.pkl')
+model_svr_cao = joblib.load('/models/model_svr_cao.pkl')
+model_rf_cao = joblib.load('/models/model_rf_cao.pkl')
+ridge_cao = joblib.load('/models/ridge_cao.pkl')
 
 def get_data():
     data = pd.read_csv('raman_5_6_2023.csv', index_col=False)
