@@ -17,7 +17,7 @@ def predict():
     #data = request.get_json()
     #print(data)
     X_b2_ts = sio2_cao_raman()
-    clf = joblib.load('model_knn_b2.pkl')
+    clf = joblib.load('/models/model_knn_b2.pkl')
     prediction = clf.predict(X_b2_ts)
     print(prediction)
     result = {
