@@ -24,27 +24,24 @@ lim9 = 1101; #1500
 lim10 = 1301; #1800
 
 #Sio2
-model_knn_sio2 = joblib.load('/models/model_knn_sio2.pkl')
-model_svr_sio2 = joblib.load('/models/model_svr_sio2.pkl')
-model_rf_sio2 = joblib.load('/models/model_rf_sio2.pkl')
-ridge_sio2 = joblib.load('/models/ridge_sio2.pkl')
+model_knn_sio2 = joblib.load('./models/model_knn_sio2.pkl')
+model_svr_sio2 = joblib.load('./models/model_svr_sio2.pkl')
+model_rf_sio2 = joblib.load('./models/model_rf_sio2.pkl')
+ridge_sio2 = joblib.load('./models/ridge_sio2.pkl')
 
 #CaO
-model_knn_cao = joblib.load('/models/model_knn_cao.pkl')
-model_svr_cao = joblib.load('/models/model_svr_cao.pkl')
-model_rf_cao = joblib.load('/models/model_rf_cao.pkl')
-ridge_cao = joblib.load('/models/ridge_cao.pkl')
+model_knn_cao = joblib.load('./models/model_knn_cao.pkl')
+model_svr_cao = joblib.load('./models/model_svr_cao.pkl')
+model_rf_cao = joblib.load('./models/model_rf_cao.pkl')
+ridge_cao = joblib.load('./models/ridge_cao.pkl')
 
-def get_data():
-    data = pd.read_csv('raman_5_6_2023.csv', index_col=False)
-    return data
 
 def pipeline_transformer(data):
     
     data.index = pd.to_datetime(data["time"])
     data.drop(['time'], axis=1, inplace=True)
     
-    data = data.iloc[:, :].values
+    data = data.values
     
     scaler = MinMaxScaler()
     data_norm = scaler.fit_transform(data.T).T
@@ -52,19 +49,19 @@ def pipeline_transformer(data):
     return data_norm
 
 def sinergy_vector(data):
-    Xsub1 = data[0,lim1:lim2]
-    Xsub2 = data[0,lim3:lim4]
-    Xsub3 = data[0,lim5:lim6]
-    Xsub4 = data[0,lim7:lim8]
-    Xsub5 = data[0,lim9:lim10]
+    data_sub1 = data[0,lim1:lim2]
+    data_sub2 = data[0,lim3:lim4]
+    data_sub3 = data[0,lim5:lim6]
+    data_sub4 = data[0,lim7:lim8]
+    data_sub5 = data[0,lim9:lim10]
 
-    data_new = np.concatenate((Xsub1,Xsub2,Xsub3,Xsub4,Xsub5),axis=0)
+    data_new = np.concatenate((data_sub1,data_sub2,data_sub3,
+                               data_sub4,data_sub5),axis=0)
     data_new = data_new.reshape(1,data_new.size)
     return data_new
 
 
-def sio2_cao_raman():
-    data = get_data()
+def sio2_cao_raman(data):
     
     data_new = sinergy_vector(pipeline_transformer(data))
     
@@ -81,9 +78,9 @@ def sio2_cao_raman():
     y_cao_ridge_ts = ridge_cao.predict(data_new)
 
     # B2
-    X_ts_b2 = np.vstack((y_cao_knn_ts, y_cao_svr_ts, y_cao_rf_ts, 
+    data_raman = np.vstack((y_cao_knn_ts, y_cao_svr_ts, y_cao_rf_ts, 
                          y_cao_ridge_ts, y_sio2_knn_ts, y_sio2_svr_ts, 
                          y_sio2_rf_ts, y_sio2_ridge_ts)).T
     
-    return X_ts_b2
+    return data_raman
     
