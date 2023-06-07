@@ -4,38 +4,13 @@ Created on Mon Jun  5 14:32:10 2023
 
 @author: Daniel
 
-
-import joblib
-import pandas as pd
-from flask import Flask, jsonify
-from data_preparation import sio2_cao_raman
-
-app = Flask(__name__)
-
-@app.route('/predict', methods=['GET','POST'])
-def predict():
-    data = pd.read_csv('./uploads/raman_5_6_2023.csv', index_col=False)
-    data_raman = sio2_cao_raman(data)
-    
-    clf = joblib.load('./models/model_knn_b2.pkl')
-    prediction = clf.predict(data_raman)
-    print(prediction)
-    
-    result = {
-        'b2_prediction': list(prediction)
-    }
-    return jsonify(result)
-
-if __name__ == '__main__':
-     app.run(host='0.0.0.0')
-
 """
 
 import pandas as pd
 import joblib
-from flask import Flask, jsonify, session
+from flask import Flask, session, render_template
 from data_preparation import sio2_cao_raman
-import csv, json
+import csv
 import numpy as np
  
 UPLOAD_FOLDER = 'D:/Raman/Fuzzy/model_files/uploads/'
@@ -49,6 +24,10 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
  
 app.secret_key = 'Foi'
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
@@ -87,7 +66,7 @@ def predict():
       # Header: b2
       csv_writer.writerow({"b2": b2[0], "SiO2": sio2, "CaO": cao})
     
-    return jsonify(result)
+    return render_template('index.html', prediction_text=result)
  
  
 if __name__ == '__main__':

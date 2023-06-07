@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+    <meta charset="UTF-8">
+    <title>SinterID</title>
+</head>
+
+<body>
+    <div class="prediction">
+        <h1>Income Prediction</h1>
+        <form action="{{ url_for('predict')}}"method="post">
+		<button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+        </form>
+
+       <br>
+       <b>{{ prediction_text }}</b>
+    </div>
+</body>
+</html>
